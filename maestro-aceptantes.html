@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Maestro de Configuración de Riesgos en Seguros</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #c8d4e0; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-size: 13px; }
+
+  .window {
+    width: 860px;
+    background: #dce6f0;
+    border: 1px solid #7a9bbf;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+  }
+
+  /* Title bar */
+  .titlebar {
+    background: linear-gradient(to bottom, #4a7fb5, #2a5a8a);
+    color: white;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    user-select: none;
+  }
+  .titlebar-btns { display: flex; gap: 4px; }
+  .titlebar-btns span {
+    width: 16px; height: 14px;
+    background: linear-gradient(to bottom, #e0e0e0, #b0b0b0);
+    border: 1px solid #888;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #333; cursor: pointer;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    background: linear-gradient(to bottom, #e8f0f8, #d0dce8);
+    border-bottom: 1px solid #9ab;
+    padding: 4px 6px;
+    display: flex; gap: 3px; align-items: center;
+  }
+  .toolbar-btn {
+    width: 24px; height: 22px;
+    background: linear-gradient(to bottom, #f0f4f8, #d8e4f0);
+    border: 1px solid #9ab;
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 13px; color: #555;
+  }
+  .toolbar-btn:hover { background: linear-gradient(to bottom, #fff, #e8f0f8); }
+  .toolbar-sep { width: 1px; height: 20px; background: #9ab; margin: 0 3px; }
+
+  /* Tabs */
+  .tabs {
+    background: #c4d4e4;
+    display: flex;
+    align-items: flex-end;
+    padding: 4px 8px 0;
+    gap: 2px;
+    border-bottom: 2px solid #7a9bbf;
+  }
+  .tab {
+    padding: 5px 14px;
+    background: linear-gradient(to bottom, #d8e6f4, #c0d0e0);
+    border: 1px solid #8aabcb;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    font-size: 12px;
+    color: #2a4a6a;
+    font-weight: 500;
+  }
+  .tab.active {
+    background: linear-gradient(to bottom, #ffffff, #eef4fc);
+    border-color: #7a9bbf;
+    color: #1a3a5a;
+    font-weight: 600;
+    position: relative; bottom: -1px;
+    padding-bottom: 6px;
+  }
+  .oracle-logo {
+    background: #cc0000;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 3px 3px 0 0;
+    border: 1px solid #aa0000;
+    border-bottom: none;
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+
+  /* Content */
+  .content {
+    background: linear-gradient(to bottom, #f0f6ff, #e8f0f8);
+    padding: 16px;
+  }
+
+  .form-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1a3a5a;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+  }
+
+  /* Fields */
+  .field-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    gap: 6px;
+  }
+  .field-label {
+    color: #2a4a6a;
+    font-weight: 500;
+    min-width: 130px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .field-input {
+    flex: 1;
+    padding: 2px 5px;
+    border: 1px solid #9ab;
+    background: white;
+    font-size: 12px;
+    font-family: inherit;
+    height: 22px;
+    color: #1a1a1a;
+  }
+  .field-input.yellow { background: #fffff0; }
+  .field-input.highlight { background: #ffffd0; }
+
+  .field-select {
+    flex: 1;
+    padding: 1px 4px;
+    border: 1px solid #9ab;
+    background: linear-gradient(to bottom, white, #f0f0f0);
+    font-size: 12px;
+    font-family: inherit;
+    height: 22px;
+    color: #1a1a1a;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    background-color: white;
+    padding-right: 18px;
+  }
+
+  /* Section */
+  .section-box {
+    border: 1px solid #8aabcb;
+    border-radius: 3px;
+    margin: 10px 0 6px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.4);
+    grid-column: 1;
+  }
+  .section-title {
+    font-weight: bold;
+    color: #1a3a5a;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+
+  /* Right column panel */
+  .right-col { display: flex; flex-direction: column; }
+
+  /* Checkboxes */
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .check-pair {
+    display: flex; align-items: center; gap: 24px; width: 100%;
+  }
+  .check-label { color: #2a4a6a; font-size: 12px; }
+  input[type="checkbox"] {
+    width: 14px; height: 14px;
+    accent-color: #2a6ab5;
+  }
+
+  /* Image area */
+  .img-area {
+    border: 1px solid #8aabcb;
+    background: linear-gradient(135deg, #ddeeff, #eef8ff);
+    height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    font-size: 30px;
+    color: #5580a0;
+  }
+
+  /* Email fields right */
+  .right-field {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 5px;
+  }
+  .right-label { color: #2a4a6a; font-size: 12px; white-space: nowrap; min-width: 80px; }
+  .right-input {
+    flex: 1; padding: 2px 5px; border: 1px solid #9ab; background: white;
+    font-size: 12px; font-family: inherit; height: 22px; color: #1a1a1a;
+  }
+
+  /* Comment */
+  .comment-row {
+    display: flex; align-items: flex-start; gap: 6px; margin-top: 6px;
+  }
+  .comment-input {
+    flex: 1; padding: 3px 5px; border: 1px solid #9ab; background: white;
+    font-size: 12px; font-family: inherit; height: 36px; resize: none;
+    color: #666;
+  }
+
+  /* Action buttons */
+  .actions {
+    background: linear-gradient(to bottom, #dce6f0, #c8d8e8);
+    border-top: 1px solid #9ab;
+    padding: 8px;
+    display: flex; justify-content: center; gap: 8px;
+  }
+  .action-btn {
+    padding: 4px 16px;
+    background: linear-gradient(to bottom, #e8f0f8, #ccdaec);
+    border: 1px solid #8aabcb;
+    border-radius: 2px;
+    font-size: 12px;
+    font-family: inherit;
+    color: #1a3a5a;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+    min-width: 80px; justify-content: center;
+  }
+  .action-btn:hover { background: linear-gradient(to bottom, #f8fcff, #ddeeff); }
+
+  /* Status bar */
+  .statusbar {
+    background: linear-gradient(to bottom, #c8d8e8, #b8c8d8);
+    border-top: 1px solid #9ab;
+    padding: 3px 10px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #2a4a6a;
+  }
+
+  .divider { height: 1px; background: #9ab; margin: 6px 0; grid-column: span 2; }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <!-- Title Bar -->
+  <div class="titlebar">
+    <span>Maestro de Configuración de Riesgos en Seguros</span>
+    <div class="titlebar-btns">
+      <span>─</span>
+      <span>□</span>
+      <span>✕</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-btn">📄</div>
+    <div class="toolbar-btn">📂</div>
+    <div class="toolbar-btn">💾</div>
+    <div class="toolbar-btn">📧</div>
+    <div class="toolbar-btn">🖨</div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-btn">⭕</div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-btn">✂</div>
+    <div class="toolbar-btn">📋</div>
+    <div class="toolbar-btn">⬛</div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-btn">🔍</div>
+    <div class="toolbar-btn">📑</div>
+    <div class="toolbar-btn">⬛</div>
+    <div class="toolbar-btn">⬛</div>
+    <div class="toolbar-btn">⬅</div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-btn">▶</div>
+    <div class="toolbar-btn">📋</div>
+    <div class="toolbar-sep"></div>
+    <div class="toolbar-btn">🔒</div>
+    <div class="toolbar-btn">🌐</div>
+    <div class="toolbar-btn">🔗</div>
+    <div class="toolbar-btn">🖨</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="oracle-logo">ORACLE</div>
+    <div class="tab active">Recepion</div>
+    <div class="tab">Cobro Financiero</div>
+    <div class="tab">Forma de Pagos</div>
+    <div class="tab">Cuenta Técnica</div>
+    <div class="tab">Prestaciones</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <div class="form-title">Aceptante de Riesgo</div>
+
+    <div class="form-grid">
+      <!-- LEFT COLUMN -->
+      <div>
+        <div class="field-row">
+          <span class="field-label">Código</span>
+          <select class="field-select" style="background-color:#fffff0"><option>000325</option></select>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Tipo Aceptante:</span>
+          <select class="field-select"><option>BAR</option></select>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Tipo ID:</span>
+          <input class="field-input" type="text" value="J">
+        </div>
+        <div class="field-row">
+          <span class="field-label">Número ID:</span>
+          <input class="field-input" type="text" value="12345678-2">
+        </div>
+        <div class="field-row">
+          <span class="field-label">Persona Contacto:</span>
+          <input class="field-input highlight" type="text" value="CARLA RAMIREZ">
+        </div>
+        <div class="field-row">
+          <span class="field-label">Status:</span>
+          <select class="field-select"><option>AUT</option></select>
+        </div>
+
+        <!-- Section Cuenta Auxiliar -->
+        <div style="border:1px solid #8aabcb; border-radius:3px; margin-top:10px; padding:8px 10px; background:rgba(255,255,255,0.4);">
+          <div class="section-title">Datos Cuenta Auxiliar (USD)</div>
+          <div class="field-row">
+            <span class="field-label">Número Cuenta Aux:</span>
+            <select class="field-select"><option>01234567891234</option></select>
+          </div>
+          <div class="field-row">
+            <span class="field-label">Divisa:</span>
+            <select class="field-select"><option>US</option></select>
+          </div>
+          <div class="field-row">
+            <span class="field-label">Email Cuenta Técnica:</span>
+            <input class="field-input" type="text" value="tec-support@examapre.com">
+          </div>
+          <div class="field-row">
+            <span class="field-label">Email Prestaciones:</span>
+            <input class="field-input" type="text" value="PABLO ANDRES">
+          </div>
+        </div>
+
+        <div class="comment-row" style="margin-top:8px;">
+          <span class="field-label" style="padding-top:3px;">Comentario Adicional:</span>
+          <textarea class="comment-input">Ningun comentario</textarea>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="right-col">
+        <div class="field-row">
+          <span class="field-label" style="min-width:100px;">Clase:</span>
+          <select class="field-select"><option>CMRE</option></select>
+        </div>
+        <div class="field-row">
+          <span class="field-label" style="min-width:100px;">Código Sup :</span>
+          <input class="field-input" type="text" value="XXX-123" style="flex:none;width:120px;">
+        </div>
+        <div class="field-row">
+          <span class="field-label" style="min-width:100px;">Fecha Cambio Status:</span>
+          <input class="field-input" type="text" value="24/04/2024" style="flex:none;width:110px;">
+        </div>
+
+        <!-- Image area -->
+        <div class="img-area">🤝💹💰</div>
+
+        <!-- Checkboxes -->
+        <div style="margin-bottom:5px;">
+          <div class="check-pair" style="margin-bottom:5px;">
+            <label class="check-row"><input type="checkbox" checked> <span class="check-label">Indicador Pago junto Líder</span></label>
+            <input type="checkbox" checked style="width:14px;height:14px;">
+          </div>
+          <div class="check-pair" style="margin-bottom:5px;">
+            <label class="check-row"><input type="checkbox" checked> <span class="check-label">Indicador Pago Coaseguro</span></label>
+            <input type="checkbox" checked style="width:14px;height:14px;">
+          </div>
+          <div class="check-pair">
+            <label class="check-row"><input type="checkbox"> <span class="check-label">Ind. Migración</span></label>
+            <input type="checkbox" style="width:14px;height:14px;">
+          </div>
+        </div>
+
+        <!-- Email fields -->
+        <div style="margin-top:8px;">
+          <div class="right-field">
+            <span class="right-label">Email:</span>
+            <input class="right-input" type="text" value="carla.ramirez@example.com">
+          </div>
+          <div class="right-field">
+            <label class="check-row" style="gap:6px;"><input type="checkbox" checked> <span class="check-label">Selección</span></label>
+            <input type="checkbox" checked style="width:14px;height:14px;margin-left:auto;">
+          </div>
+          <div class="right-field" style="margin-top:6px;">
+            <span class="right-label">Email Cuenta Técnica:</span>
+            <input class="right-input" type="text" value="tec-support.@com">
+          </div>
+          <div class="right-field">
+            <span class="right-label">Destinatario</span>
+            <input class="right-input" type="text" value="MARIA RAMOS">
+          </div>
+          <div class="right-field">
+            <span class="right-label">Email Prestaciones:</span>
+            <input class="right-input" type="text" value="prestaciones@examlpe.com">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="actions">
+    <button class="action-btn">💾 Guardar</button>
+    <button class="action-btn">🔍 Buscar</button>
+    <button class="action-btn">📄 Nuevo</button>
+    <button class="action-btn">🗑 Eliminar</button>
+    <button class="action-btn">📊 Reporte</button>
+    <button class="action-btn">✕ Cerrar</button>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="statusbar">
+    <span>nícope @ MY_SCHEMA</span>
+    <span>Registro: 102/327</span>
+    <span>24/04/2024&nbsp;&nbsp;&nbsp;03:00:44 a.m.&nbsp;&nbsp;⊞</span>
+  </div>
+</div>
+
+</body>
+</html>
